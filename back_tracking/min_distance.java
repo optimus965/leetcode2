@@ -16,7 +16,7 @@ class solution {
             }
             else {
                 double cv = Math.sqrt((nums[i][0] - x) * (nums[i][0] - x) + (nums[i][1] - y) * (nums[i][1] - y));
-                        sol(nums,previous,true,sum +cv,index + 1,x,y);
+                sol(nums,previous,true,sum +cv,index + 1,x,y);
             }
             previous[i] = false;
         }
@@ -28,6 +28,6 @@ public class Main {
         solution n =new solution();
         boolean[] visited = new boolean[nums.length];
         n.sol(nums,visited,true,0,0,-1,-1);
-        System.out.println(n.min);
+        System.out.printf("%.2f",n.min);
     }
 }
