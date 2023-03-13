@@ -2,6 +2,7 @@ import java.math.*;
 import java.util.Arrays;
 import java.util.Scanner;
 class solution {
+    // it is using boolean array
     public double sol(int[][] nums,boolean[] previous,int index) {
         if(index == (nums.length >> 1)) {
             return 0;
@@ -23,6 +24,27 @@ class solution {
             previous[i] = false;
         }
         previous[x1] = false;
+        return min;
+    }
+    // using bitmask and it more efficient than above approach
+    public int lsBit(int mask) {
+        return (mask & -mask);
+    }
+    public double sol(int mask,int[][] nums) {
+        if(mask == 0) {
+            return 0;
+        }
+        int flip1 = this.lsBit(mask);
+        int pos1 = Integer.numberOfTrailingZeros(flip1);
+        int m = mask  - flip1;
+        double min = (int)1e9;
+        while(m > 0) {
+            int flip2 = this.lsBit(m);
+            int pos2 = Integer.numberOfTrailingZeros(flip2);
+            double value = Math.sqrt(Math.pow(nums[pos1][0] - nums[pos2][0],2) + Math.pow(nums[pos2][1] - nums[pos1][1],2));
+            min = Math.min(min,value + sol(mask^flip1^flip2,nums));
+            m = m - flip2;
+        }
         return min;
     }
 }
