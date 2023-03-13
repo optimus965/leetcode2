@@ -1,33 +1,52 @@
 import java.math.*;
-// Java code for task 9
+import java.util.Arrays;
+import java.util.Scanner;
 class solution {
-    double min = Integer.MAX_VALUE;
-    public void sol(int[][] nums,boolean[] previous,boolean notpair,double sum,int index,int x, int y) {
-        if(index == nums.length) {
-            min = Math.min(min,sum);
+    public double sol(int[][] nums,boolean[] previous,int index) {
+        if(index == (nums.length >> 1)) {
+            return 0;
         }
-        for(int i =0;i < nums.length;i++) {
-            if(previous[i]) {
-                continue;
+        double min = Integer.MAX_VALUE;
+        int x1 = 0;
+        for(int  i =0;i < nums.length;i++) {
+            if(!previous[i]) {
+                previous[i] = true;
+                x1 = i;
+                break;
             }
+        }
+        for(int i = 0;i < nums.length;i++) {
+            if(previous[i]) continue;
             previous[i] = true;
-            if(notpair) {
-                sol(nums,previous,false,sum,index + 1,nums[i][0],nums[i][1]);
-            }
-            else {
-                double cv = Math.sqrt((nums[i][0] - x) * (nums[i][0] - x) + (nums[i][1] - y) * (nums[i][1] - y));
-                sol(nums,previous,true,sum +cv,index + 1,x,y);
-            }
+            double cv = Math.sqrt((nums[i][0] - nums[x1][0]) * (nums[i][0] - nums[x1][0]) + (nums[i][1] - nums[x1][1]) * (nums[i][1] - nums[x1][1]));
+            min= Math.min(cv + sol(nums,previous,index + 1),min);
             previous[i] = false;
         }
+        previous[x1] = false;
+        return min;
     }
 }
 public class Main {
     public static void main(String[] args) {
-        int[][] nums = {{1,1},{8,6},{6,8},{1,3}};
-        solution n =new solution();
-        boolean[] visited = new boolean[nums.length];
-        n.sol(nums,visited,true,0,0,-1,-1);
-        System.out.printf("%.2f",n.min);
+        Scanner scanner =new Scanner(System.in);
+        int count = 1;
+        while(true) {
+            int n = scanner.nextInt();
+            if(n == 0) {
+                break;
+            }
+            int[][] nums = new int[2*n][2];
+            boolean[] visited = new boolean[2*n];
+            for(int i =0;i < 2*n;i++) {
+                String string = scanner.next();
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+                nums[i][0] = x;
+                nums[i][1] = y;
+            }
+            solution sol =new solution();
+            System.out.printf("Case %d: %.2f",(count++),sol.sol(nums,visited,0));
+            System.out.println();
+        }
     }
 }
