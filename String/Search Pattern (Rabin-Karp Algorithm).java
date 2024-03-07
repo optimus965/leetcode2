@@ -14,7 +14,18 @@ class Solution
             h = (h*d)%mod;
         }
         for(int i =0;i < pattern.length();i++) {
-            p = (p*d + pattern.charAt(i))%mod;
+            p = (p*d + pattern.charAt(i))%mod; 
+            // 1st iteration 1
+            // 2nd iteration 1*256 + 2
+            // 3rd iteration ((1*256 + 2)*256) + 3
+            // it is like multiplying with 10 for every time we want to add coming number
+            // it like giving space for the coming number
+            // ex 1
+            // 1*10 + 2
+            // 12*10 + 3
+            // 123*10 + 4
+            //1234*10 + 5
+            // 12345
             t = (t*d + text.charAt(i))%mod;
         }
         int j = -1;
