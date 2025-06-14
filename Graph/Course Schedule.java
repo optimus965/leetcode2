@@ -1,3 +1,4 @@
+// Cycle Detection in Directed Graph
 class Solution {
     public boolean canFinish(int numCourses, int[][] courses) {
         List<Integer>[] graph = new ArrayList[numCourses];
