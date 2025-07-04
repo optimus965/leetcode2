@@ -1,43 +1,43 @@
 class Solution {
+    List<String> finalList;
     public List<String> wordBreak(String s, List<String> wordDict) {
+        Map<String,Boolean> map = new HashMap<>();
+        for(String word:wordDict) {
+            map.put(word,true);
+        }
+        finalList =new ArrayList<>();
         int n = s.length();
-        boolean[][] store = new boolean[n][n];
-        boolean[] dp = new boolean[n + 1];
-        dp[0] = true; // base case
-        // Fill store[i][j] and dp
-         for (int i = 0; i < s.length(); i++) {
-            for (String word : wordDict) {
-                // Handle out of bounds case
-                if (i < word.length() - 1) {
-                    continue;
-                }
-                if (i == word.length() - 1 || dp[i - word.length()]) {
-                    if (
-                        s.substring(i - word.length() + 1, i + 1).equals(word)
-                    ) {
-                        dp[i] = true;
-                        store[i][i - word.length() + 1] = true;
-                    }
+        boolean[] dp = new boolean[s.length() + 1];
+        List<Integer>[] parent = new ArrayList[n + 1];
+        for(int i =0;i <= n;i++) {
+            parent[i] = new ArrayList<>();
+        }
+        dp[0] = true;
+        for(int i = 0;i < n;i++) {
+            for(int j = i + 1;j <= n;j++) {
+                if(!dp[i]) continue;
+                if(map.containsKey(s.substring(i,j))) {
+                    dp[j] = true;
+                    parent[j].add(i);
                 }
             }
         }
-        // Build result using store
-        List<String>[] list = new ArrayList[n];
-        for (int i = 0; i < n; i++) {
-            list[i] = new ArrayList<>();
-            for (int j = 0; j <= i; j++) {
-                if (store[i][j]) {
-                    String word = s.substring(j, i + 1);
-                    if (j == 0) {
-                        list[i].add(word);
-                    } else {
-                        for (String prev : list[j - 1]) {
-                            list[i].add(prev + " " + word);
-                        }
-                    }
-                }
-            }
+        Stack<String> stack = new Stack<>();
+        dfs(parent,s,n,stack);
+        return finalList;
+    }
+    public void dfs(List<Integer>[] parent,String s,int index,Stack<String> stack) {
+        if(index == 0) {
+            List<String> list = new ArrayList<>(stack);
+            Collections.reverse(list);
+            String string = String.join(" ",list);
+            finalList.add(string);
+            return;
         }
-        return list[n - 1];
+        for(int i:parent[index]) {
+            stack.push(s.substring(i,index));
+            dfs(parent,s,i,stack);
+            stack.pop();
+        }
     }
 }
